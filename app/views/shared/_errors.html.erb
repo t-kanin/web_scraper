@@ -1,0 +1,11 @@
+<% if err.errors.any? %>
+  <div class="ui message transition">
+    <i class="close icon"></i>
+    <div class="header">These errors preventing you from completing the tasks</div>
+    <ul class="list">
+      <% err.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
