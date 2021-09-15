@@ -4,28 +4,30 @@ require 'selenium-webdriver'
 require 'nokogiri'
 
 class ScraperService < ApplicationService
-  attr_reader :driver, :wait, :keyword
+  attr_reader :doc
 
   def initialize(keyword)
-    @driver = Selenium::WebDriver.for :chrome
-    @wait = Selenium::WebDriver::Wait.new(timeout: 10)
-    @keyword = keyword
+    driver = Selenium::WebDriver.for :chrome
     driver.get 'http://www.google.com/'
+    driver.find_element(name: 'q').send_keys keyword, :return
+    @doc = Nokogiri::HTML(driver.page_source)
   end
 
   def call
-    driver.find_element(name: 'q').send_keys keyword, :return
-    total_search = wait.until { driver.find_element(id: 'result-stats').text }
-    puts total_search
-    retrieve_multiple_elements
+    p page_result
+    all_search_result
+    nil
   end
 
-  def retrieve_multiple_elements
-    element = driver.find_element(:id, 'search')
-    elements = element.find_elements(:tag_name, 'a')
+  def all_search_result
+    elements = doc.css('div.g')
+    elements.each do |e|
+      p e.css('h3')
+      p '******************************************************************************'
+    end
+  end
 
-    elements.each { |e|
-      puts e.text
-    }
+  def page_result
+    doc.at_css('div#result-stats').text
   end
 end
