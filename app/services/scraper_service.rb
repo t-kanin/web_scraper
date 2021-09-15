@@ -17,6 +17,15 @@ class ScraperService < ApplicationService
     driver.find_element(name: 'q').send_keys keyword, :return
     total_search = wait.until { driver.find_element(id: 'result-stats').text }
     puts total_search
-    driver.quit
+    retrieve_multiple_elements
+  end
+
+  def retrieve_multiple_elements
+    element = driver.find_element(:id, 'search')
+    elements = element.find_elements(:tag_name, 'a')
+
+    elements.each { |e|
+      puts e.text
+    }
   end
 end
