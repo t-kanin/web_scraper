@@ -8,7 +8,6 @@ class Keyword < ApplicationRecord
     SmarterCSV.process(file.path, options) do |chunk|
       chunk.each do |data_hash|
         data_hash[:user_id] = uid
-        p data_hash
         Keyword.create!(data_hash)
       end
     end
