@@ -1,8 +1,41 @@
-<%= form_with url: import_keywords_path, multipart: true, class: 'ui form' do |f| %>
-  <div class="fields">
-    <div class="field">
-      <%= f.file_field :file, class: 'ui small button' %>
-    </div>
-    <%= f.submit 'Upload CSV', class: 'ui submit button'%>
+<div class= "ui search">
+  <div class="ui icon input">
+    <input class="prompt" type="text" placeholder="Search keyword..." id= "myInput">
+    <i class="search icon"></i>
   </div>
-<%end%>
+  <div class="results"></div>
+</div>
+
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>Keyword</th>
+      <th># of Adwords</th>
+      <th># of Non-Adwords</th>
+      <th># of links</th>
+      <th># of search results</th>
+    </tr>
+  </thead>
+  <tbody id="myTable">
+    <tr>
+      <% if @keywords.any?%>
+        <%= render @keywords %>
+      <%end%>
+    </tr>
+  </tbody>
+  <tfoot class="full-width">
+    <tr>
+      <th></th>
+      <th colspan="4">
+        <%= form_with url: import_keywords_path, multipart: true, class: 'ui form' do |f| %>
+          <div class="fields">
+            <div class="field">
+              <%= f.file_field :file, class: 'ui small button' %>
+            </div>
+            <%= f.submit 'Upload CSV', class: 'ui submit button'%>
+          </div>
+        <%end%>
+      </th>
+    </tr>
+  </tfoot>
+</table>
