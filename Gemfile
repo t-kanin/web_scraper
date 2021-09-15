@@ -31,6 +31,7 @@ gem 'semantic-ui-sass'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise', '~> 4.8'
+gem 'selenium-webdriver', '~> 3.142', '>= 3.142.7'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
