@@ -6,7 +6,7 @@ $(document).on('turbolinks:load', function(){
     });
   });
 
-  $('th').click(function(){
+  $('th').on('click', function(){
     var table = $(this).parents('table').eq(0)
     var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
     this.asc = !this.asc

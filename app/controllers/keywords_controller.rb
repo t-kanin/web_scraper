@@ -6,7 +6,7 @@ class KeywordsController < ApplicationController
   end
 
   def import
-    Keyword.import(params[:file])
+    Keyword.import(params[:file],current_user.id)
     redirect_to root_url, notice: 'Successfully imported data.'
   end
 end
