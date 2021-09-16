@@ -14,7 +14,7 @@ class ScraperService < ApplicationService
   end
 
   def call
-    [page_result, search_result]
+    [page_result, search_result, ad_result]
   end
 
   def search_result
@@ -23,6 +23,19 @@ class ScraperService < ApplicationService
     elements.pop
     elements.each do |e|
       h = { title: e.css('h3').text, link: e.css('a @href').first.text }
+      res << h
+    end
+    res
+  end
+
+  def ad_result
+    res = []
+    elements = doc.css('div#tads a')
+    elements.each do |e|
+      title = e.css('span').first
+      next if title.nil?
+
+      h = { title: title.text, link: e.css('@href').first.text }
       res << h
     end
     res
