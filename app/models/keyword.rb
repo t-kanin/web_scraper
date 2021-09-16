@@ -4,12 +4,8 @@ class Keyword < ApplicationRecord
   belongs_to :user
 
   def self.import(file, uid)
-    options = {}
-    SmarterCSV.process(file.path, options) do |chunk|
-      chunk.each do |data_hash|
-        data_hash[:user_id] = uid
-        Keyword.create!(data_hash)
-      end
+    SmarterCSV.process(file.path, {}) do |chunk|
+      Keyword.where(user_id: uid).insert_all(chunk)
     end
   end
 end
