@@ -14,17 +14,18 @@ class ScraperService < ApplicationService
   end
 
   def call
-    p page_result
-    all_search_result
-    nil
+    [page_result, search_result]
   end
 
-  def all_search_result
+  def search_result
+    res = []
     elements = doc.css('div.g')
+    elements.pop
     elements.each do |e|
-      p e.css('h3')
-      p '******************************************************************************'
+      h = { title: e.css('h3').text, link: e.css('a @href').first.text }
+      res << h
     end
+    res
   end
 
   def page_result
