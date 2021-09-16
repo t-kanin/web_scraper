@@ -16,8 +16,8 @@ class FileHandler
 
   def self.handle_upload(file, uid)
     raise FileEmptyError if file.nil?
-    raise FileTooBigError if file.size > 1000.megabytes
     raise FileExntensionError unless %w[csv].include?(file.extension)
+    raise FileTooBigError if file.size > 1000.megabytes
 
     Keyword.import(file, uid)
   end
