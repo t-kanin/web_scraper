@@ -4,7 +4,10 @@ class Keyword < ApplicationRecord
   belongs_to :user
 
   def self.import(file, uid)
-    SmarterCSV.process(file.path, {}) do |chunk|
+    options = {
+      required_headers: [:keyword]
+    }
+    SmarterCSV.process(file.path, options) do |chunk|
       Keyword.where(user_id: uid).insert_all(chunk)
     end
   end
