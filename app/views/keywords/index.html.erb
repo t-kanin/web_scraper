@@ -1,7 +1,7 @@
 <%= form_with url: import_keywords_path, multipart: true, class: 'ui form' do |f| %>
   <div class="fields">
     <div class="field">
-      <%= f.file_field :file, class: 'ui small button' %>
+      <%= f.file_field :file, accept: 'text/csv', class: 'ui small button' %>
     </div>
     <%= f.submit 'Upload CSV', class: 'ui submit button'%>
   </div>
