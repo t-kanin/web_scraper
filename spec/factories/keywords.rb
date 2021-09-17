@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :keyword do
-    keyword { Faker::Superhero.prefix }
-
+    sequence(:keyword) { |n| Faker::Superhero.prefix }
     association :user
   end
 end
