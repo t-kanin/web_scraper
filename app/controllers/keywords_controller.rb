@@ -2,7 +2,7 @@
 
 class KeywordsController < ApplicationController
   def index
-    @keywords = Keyword.all
+    @keywords = current_user.keywords
   end
 
   def import
