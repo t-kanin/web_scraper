@@ -3,7 +3,7 @@
 class ScraperWorker
   include Sidekiq::Worker
 
-  def perform(*args)
-    ScraperService.new(args).call
+  def perform(keywords)
+    ScraperService.instance.call(keywords)
   end
 end

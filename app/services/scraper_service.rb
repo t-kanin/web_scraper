@@ -5,22 +5,17 @@ require 'nokogiri'
 
 class ScraperService < ApplicationService
   include Singleton
-  
-  def call(keyword)
+
+  def call(keywords)
     key_res = []
     driver = init_driver
     keywords.each do |keyword|
-      driver.find_element(name: 'q').send_keys keyword, :return
-      doc = Nokogiri::HTML(driver.page_source)
-      res = {
-        page_result: page_result(doc),
-        search_result: search_result(doc),
-        ad_result: ad_result(doc)
-      }
+      res = result(driver, keyword)
       driver.find_element(name: 'q').clear
       key_res << res
     end
 
+    driver.quit
     key_res
   end
 
@@ -28,6 +23,16 @@ class ScraperService < ApplicationService
     driver = Selenium::WebDriver.for :chrome
     driver.get 'http://www.google.com/'
     driver
+  end
+
+  def result(driver, keyword)
+    driver.find_element(name: 'q').send_keys keyword, :return
+    doc = Nokogiri::HTML(driver.page_source)
+    {
+      page_result: page_result(doc),
+      search_result: search_result(doc),
+      ad_result: ad_result(doc)
+    }
   end
 
   def search_result(doc)
