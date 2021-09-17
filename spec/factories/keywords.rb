@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :keyword do
-    keyword { "MyString" }
+    keyword { Faker::Superhero.prefix }
+
+    association :user
   end
 end

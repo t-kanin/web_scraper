@@ -3,6 +3,7 @@
 class Keyword < ApplicationRecord
   belongs_to :user
 
+  validates :keyword, presence: true
   validates :file, presence: true
 
   def self.import(file, uid)
