@@ -4,13 +4,9 @@ require 'selenium-webdriver'
 require 'nokogiri'
 
 class ScraperService < ApplicationService
-  attr_reader :keywords
-
-  def initialize(keywords)
-    @keywords = keywords
-  end
-
-  def call
+  include Singleton
+  
+  def call(keyword)
     key_res = []
     driver = init_driver
     keywords.each do |keyword|
