@@ -9,6 +9,8 @@ class KeywordsController < ApplicationController
     file = params[:file]
     FileHandler.handle_upload(file, current_user.id)
     redirect_to root_url, notice: 'Successfully imported data.'
+  rescue FileHandler::FileExntensionError => e
+    redirect_to root_url, alert: e.message
   rescue FileHandler::FileEmptyError => e
     redirect_to root_url, alert: e.message
   rescue FileHandler::FileTooBigError => e
