@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 class KeywordsController < ApplicationController
+  before_action :find_keyword, only: %i[show]
+
   rescue_from FileHandler::FileExntensionError, with: :file_invalid
   rescue_from FileHandler::FileEmptyError, with: :file_invalid
   rescue_from FileHandler::FileTooBigError, with: :file_invalid
 
   def index
     @keywords = current_user.keywords
+  end
+
+  def show
+    @links = find_links
   end
 
   def import
@@ -23,5 +29,17 @@ class KeywordsController < ApplicationController
 
   def file_invalid(exception)
     redirect_to root_url, alert: exception.message
+  end
+
+  def find_keyword
+    @keyword = Keyword.find(params[:id])
+  end
+
+  def find_links
+    @links = if params[:status].eql?('ads')
+               @keyword.ad_result
+             else
+               @keyword.search_result
+             end
   end
 end

@@ -37,7 +37,7 @@ class ScraperService < ApplicationService
     res = []
     elements = doc.css(div)
     elements.each do |e|
-      res << { title: e.css(title).text, url: e.css(link).first.text } unless e.css(title).blank?
+      res << { title: e.css(title).first.text, url: e.css(link).first.text } unless e.css(title).blank?
     end
 
     res

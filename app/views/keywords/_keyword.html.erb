@@ -1,7 +1,7 @@
 <tr>
   <td><%= keyword.keyword %></td>
-  <td><%= keyword.ad_result.count%></td>
-  <td><%= keyword.search_result.count%></td>
+  <td><%= link_to keyword.ad_result.count, keyword_path(keyword, status: 'ads')%></td>
+  <td><%= link_to keyword.search_result.count, keyword_path(keyword, status: 'nonads')%></td>
   <td><%= keyword.ad_result.count + keyword.search_result.count%></td>
   <td><%= keyword.page_result %></td>
 </tr>

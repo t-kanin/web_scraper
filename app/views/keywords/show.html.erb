@@ -1,0 +1,26 @@
+<div class= "ui search">
+  <div class="ui icon input">
+    <input class="prompt" type="text" placeholder="Search keyword..." id= "myInput">
+    <i class="search icon"></i>
+  </div>
+  <div class="results"></div>
+</div>
+
+<table class="ui fixed table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody id="myTable">
+    <tr>
+      <% @links.each do |link| %>
+        <tr>
+          <td><%= link.title %></td>
+          <td><%= link.url%></td>
+        </tr>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
