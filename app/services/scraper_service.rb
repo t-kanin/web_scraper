@@ -5,14 +5,12 @@ class ScraperService < ApplicationService
 
   def call(keywords)
     init_driver
-    result = keywords.each_with_object([]) do |keyword, accum|
-      res = result(keyword)
+    keywords.each do |keyword|
+      update_database(keyword, result(keyword))
       @driver.find_element(name: 'q').clear
-      accum << res
     end
 
     @driver.quit
-    result
   end
 
   def init_driver
@@ -34,16 +32,23 @@ class ScraperService < ApplicationService
   end
 
   def fetch_top_position_adwords_links
-    @dic.css('div#tads a').map { |link| { title: link.css('span').text, link: link.css('@href').first.text } }
+    @dic.css('div#tads a').map { |link| { title: link.css('span').text, url: link.css('@href').first.text } }
         .reject { |h| h[:title].empty? }
   end
 
   def fetch_non_adwords_links
-    @dic.css('div.g').map { |link| { title: link.css('h3').text, link: link.css('a @href').first.text } }
+    @dic.css('div.g').map { |link| { title: link.css('h3').text, url: link.css('a @href').first.text } }
         .reject { |h| h[:title].empty? }
   end
 
   def page_result
     @dic.at_css('div#result-stats').text
+  end
+
+  def update_database(key, res)
+    Keyword.where(keyword: key).update(page_result: res[:page_result])
+    kid = Keyword.where(keyword: key).last.id
+    SearchResult.where(keyword_id: kid).insert_all(res[:search_result]) unless res[:search_result].empty?
+    AdResult.where(keyword_id: kid).insert_all(res[:ad_result]) unless res[:ad_result].empty?
   end
 end
