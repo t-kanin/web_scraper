@@ -2,8 +2,8 @@
 
 class Keyword < ApplicationRecord
   belongs_to :user
-
-  validates :file, presence: true
+  has_many :search_result
+  has_many :ad_result
 
   def self.import(file, uid)
     options = {

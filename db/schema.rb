@@ -10,17 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_16_032614) do
+ActiveRecord::Schema.define(version: 2021_09_20_050921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ad_results", force: :cascade do |t|
+    t.string "title"
+    t.string "url"
+    t.bigint "keyword_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["keyword_id"], name: "index_ad_results_on_keyword_id"
+  end
 
   create_table "keywords", force: :cascade do |t|
     t.string "keyword"
     t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "user_id", null: false
+    t.string "page_result"
     t.index ["user_id"], name: "index_keywords_on_user_id"
+  end
+
+  create_table "search_results", force: :cascade do |t|
+    t.string "url"
+    t.bigint "keyword_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "title"
+    t.index ["keyword_id"], name: "index_search_results_on_keyword_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -35,5 +54,7 @@ ActiveRecord::Schema.define(version: 2021_09_16_032614) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "ad_results", "keywords"
   add_foreign_key "keywords", "users"
+  add_foreign_key "search_results", "keywords"
 end
