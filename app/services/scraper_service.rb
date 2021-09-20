@@ -34,7 +34,7 @@ class ScraperService < ApplicationService
   end
 
   def fetch_top_position_adwords_links
-    @dic.css('div#tads a').map { |link| { title: link.css('span').text, link: link.css('@href').first.text } }
+    @dic.css('div#tads a').map { |link| { title: link.css('div span').text, link: link.css('@href').first.text } }
         .reject { |h| h[:title].empty? }
   end
 
