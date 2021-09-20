@@ -206,6 +206,7 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
+    smarter_csv (1.2.8)
     spring (3.0.0)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
@@ -262,6 +263,7 @@ DEPENDENCIES
   selenium-webdriver (~> 3.142, >= 3.142.7)
   semantic-ui-sass
   shoulda-matchers (~> 5.0)
+  smarter_csv (~> 1.2, >= 1.2.8)
   spring
   turbolinks (~> 5)
   tzinfo-data
