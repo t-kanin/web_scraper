@@ -2,6 +2,12 @@
   <div class = "ui container">
     <%= link_to 'Home', root_path, class: 'item' %>
     <% if user_signed_in? %>
+      <div class="ui dropdown item"> Task
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <%= link_to 'Create new task', '', class: 'item' %>
+        </div>
+      </div>
       <div class="right menu">
         <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: "ui item" %>
       </div>
