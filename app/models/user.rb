@@ -20,5 +20,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_many :keywords, dependent: :destroy
+
   validates :email, uniqueness: { case_senstivie: false }
 end
