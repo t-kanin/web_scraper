@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :keyword do
-    sequence(:keyword) { |n| Faker::Superhero.prefix }
+    sequence(:keyword) { Faker::Superhero.prefix }
     association :user
   end
 end
