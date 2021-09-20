@@ -40,7 +40,7 @@ class ScraperService < ApplicationService
 
   def fetch_non_adwords_links
     @dic.css('div.g').map { |link| { title: link.css('h3').text, link: link.css('a @href').first.text } }
-            .reject { |h| h[:title].empty? }
+        .reject { |h| h[:title].empty? }
   end
 
   def page_result
