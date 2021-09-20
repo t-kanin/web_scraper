@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -11,8 +13,27 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-end
+ # == Schema Information
+ #
+ # Table name: users
+ require 'rails_helper'
+
+ RSpec.describe User, type: :model do
+   describe 'when first created' do
+     subject { build :user }
+
+     it { is_expected.to be_valid }
+   end
+
+   describe '.associations' do
+     it { is_expected.to have_many(:keywords) }
+   end
+
+   describe '#validations' do
+     it { is_expected.to validate_presence_of(:email) }
+     it { is_expected.to validate_presence_of(:password) }
+     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+   end
+ end
