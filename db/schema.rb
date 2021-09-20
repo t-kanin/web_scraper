@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_050921) do
+ActiveRecord::Schema.define(version: 2021_09_20_070835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_050921) do
     t.string "title"
     t.string "url"
     t.bigint "keyword_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["keyword_id"], name: "index_ad_results_on_keyword_id"
   end
 
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_050921) do
   create_table "search_results", force: :cascade do |t|
     t.string "url"
     t.bigint "keyword_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "title"
     t.index ["keyword_id"], name: "index_search_results_on_keyword_id"
   end
