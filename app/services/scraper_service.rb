@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'selenium-webdriver'
-require 'nokogiri'
-
 class ScraperService < ApplicationService
   include Singleton
 
@@ -30,32 +27,18 @@ class ScraperService < ApplicationService
     doc = Nokogiri::HTML(driver.page_source)
     {
       page_result: page_result(doc),
-      search_result: search_result(doc),
-      ad_result: ad_result(doc)
+      search_result: search(doc, 'div.g', 'h3', 'a @href'),
+      ad_result: search(doc, 'div#tads a', 'span', '@href')
     }
   end
 
-  def search_result(doc)
+  def search(doc, div, title, link)
     res = []
-    elements = doc.css('div.g')
-    elements.pop
+    elements = doc.css(div)
     elements.each do |e|
-      h = { title: e.css('h3').text, link: e.css('a @href').first.text }
-      res << h
+      res << { title: e.css(title).text, link: e.css(link).first.text } unless e.css(title).blank?
     end
-    res
-  end
 
-  def ad_result(doc)
-    res = []
-    elements = doc.css('div#tads a')
-    elements.each do |e|
-      title = e.css('span').first
-      next if title.nil?
-
-      h = { title: title.text, link: e.css('@href').first.text }
-      res << h
-    end
     res
   end
 
