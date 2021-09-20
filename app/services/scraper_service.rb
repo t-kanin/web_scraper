@@ -8,6 +8,7 @@ class ScraperService < ApplicationService
     keywords.each do |keyword|
       update_database(keyword, result(keyword))
       @driver.find_element(name: 'q').clear
+      sleep rand(1...15)
     end
 
     @driver.quit
@@ -16,7 +17,7 @@ class ScraperService < ApplicationService
   def init_driver
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument('--headless')
-    @driver = Selenium::WebDriver.for :chrome, options: options
+    @driver = Selenium::WebDriver.for :chrome
     @driver.get 'http://www.google.com/'
     @driver
   end
@@ -32,7 +33,7 @@ class ScraperService < ApplicationService
   end
 
   def fetch_top_position_adwords_links
-    @dic.css('div#tads a').map { |link| { title: link.css('div span').first.text, url: link.css('@href').first.text } }
+    @dic.css('div#tads').map { |link| { title: link.css('div a span').first.text, url: link.css('@href').first.text } }
         .reject { |h| h[:title].empty? }
   end
 
@@ -42,10 +43,14 @@ class ScraperService < ApplicationService
   end
 
   def page_result
+    return 'no results containing your search terms' if @dic.at_css('div#result-stats').nil?
+
     @dic.at_css('div#result-stats').text
   end
 
   def update_database(key, res)
+    return if res[:page_result].nil?
+
     Keyword.where(keyword: key).update(page_result: res[:page_result])
     kid = Keyword.where(keyword: key).last.id
     SearchResult.where(keyword_id: kid).insert_all(res[:search_result]) unless res[:search_result].empty?

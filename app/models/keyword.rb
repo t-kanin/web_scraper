@@ -8,7 +8,7 @@ class Keyword < ApplicationRecord
   def self.import(file, uid)
     options = {
       required_headers: [:keyword],
-      chunk_size: 20
+      chunk_size: 10002
     }
     SmarterCSV.process(file.path, options) do |chunk|
       Keyword.where(user_id: uid).insert_all(chunk)
