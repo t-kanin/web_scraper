@@ -32,7 +32,9 @@ gem 'smarter_csv', '~> 1.2', '>= 1.2.8'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise', '~> 4.8'
+gem 'nokogiri', '~> 1.12', '>= 1.12.4'
 gem 'selenium-webdriver', '~> 3.142', '>= 3.142.7'
+gem 'sidekiq', '~> 6.2', '>= 6.2.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
