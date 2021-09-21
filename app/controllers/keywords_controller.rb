@@ -36,10 +36,11 @@ class KeywordsController < ApplicationController
   end
 
   def find_links
-    @links = if params[:status].eql?('ads')
-               @keyword.ad_result
+    @links = case params[:status]
+             when 'ads'
+               @keyword.ad_results
              else
-               @keyword.search_result
+               @keyword.search_results
              end
   end
 end
