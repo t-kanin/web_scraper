@@ -55,6 +55,12 @@ RSpec.describe KeywordsController, type: :controller do
         expect(flash[:alert]).to match('Missing require headers')
       end
 
+      it 'has invalid csv extension' do
+        allow(File).to receive(:extname).and_return('.txt')
+        expect(subject).to redirect_to(root_path)
+        expect(flash[:alert]).to match('FileHandler::FileExntensionError')
+      end
+
       it 'has valid csv file' do
         FileHandlerHelper.generate_csv(%w[a b c d e k], %w[keyword])
         expect(subject).to redirect_to(root_path)
