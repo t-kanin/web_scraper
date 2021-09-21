@@ -16,7 +16,7 @@ class FileHandler
   end
 
   def self.handle_upload(file, uid)
-    raise FileEmptyError if file.nil?
+    raise FileEmptyError if file.blank?
     raise FileExntensionError unless %w[.csv].include? File.extname(file)
     raise FileTooBigError if IO.readlines(file).size > 1001
 
