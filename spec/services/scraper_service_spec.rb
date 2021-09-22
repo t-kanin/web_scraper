@@ -63,11 +63,9 @@ RSpec.describe ScraperService, type: :service do
 
       it 'inserts to the database' do
         allow(@driver).to receive(:page_source).and_return(subject)
-        aggregate_failures do
-          expect { instance.store_result(k.keyword, instance.result) }
-            .to  change(AdResult, :count).by(1)
-            .and change(SearchResult, :count).by 10
-        end
+        expect { instance.store_result(k.keyword, instance.result) }
+          .to  change(AdResult, :count).by(1)
+          .and change(SearchResult, :count).by 10
       end
     end
   end
