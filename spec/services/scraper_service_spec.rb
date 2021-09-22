@@ -2,25 +2,30 @@
 
 require 'rails_helper'
 
-RSpec.describe ScraperService, type: :model do
+RSpec.describe ScraperService, type: :service do
   describe 'call' do
     subject do
       VCR.use_cassette('google') do
-        uri = URI('https://www.google.com/search?q=ads')
-        Net::HTTP.get(uri)
+        # uri = URI('https://www.google.com/search?q=ads')
+        # Net::HTTP.get(uri)
+        options = Selenium::WebDriver::Chrome::Options.new
+        options.add_argument('--headless')
+        driver = Selenium::WebDriver.for :chrome, options: options
+        driver.get 'http://www.google.com/search?q=ads'
+        driver.page_source
       end
     end
 
+    let(:instance) { described_class.instance.result }
+
     context 'fetch page_result' do
-      let(:instance) { described_class.instance }
       it 'returns 2,370... results' do
         allow(@driver).to receive(:page_source).and_return(subject)
-        expect(instance.result[:page_result]).to match 'ผลการค้นหาประมาณ 2,370,000,000 รายการ'
+        expect(instance[:page_result]).to match 'ผลการค้นหาประมาณ 2,370,000,000 รายการ'
       end
     end
 
     context 'fetch ad_words_results' do
-      let(:instance) { described_class.instance }
       it 'returns with title and url' do
         mock =
           [
@@ -31,12 +36,11 @@ RSpec.describe ScraperService, type: :model do
           ]
 
         allow(@driver).to receive(:page_source).and_return(subject)
-        expect(instance.result[:ad_result]).to eq(mock)
+        expect(instance[:ad_result]).to eq(mock)
       end
     end
 
     context 'fetch non_ad_words_results' do
-      let(:instance) { described_class.instance }
       it 'returns with title and url' do
         mock =
           [
@@ -53,9 +57,22 @@ RSpec.describe ScraperService, type: :model do
               url: 'https://play.google.com/store/apps/details?id=com.google.android.apps.adwords&hl=th&gl=US'
             }
           ]
-
         allow(@driver).to receive(:page_source).and_return(subject)
-        expect(instance.result[:search_result]).to include(mock)
+        expect(instance[:search_result]).to include(mock)
+      end
+    end
+
+    context 'store result' do
+      let(:instance) { described_class.instance }
+      let(:k) { create :keyword, :ads }
+
+      it 'inserts to the database' do
+        allow(@driver).to receive(:page_source).and_return(subject)
+        aggregate_failures do
+          expect { instance.update_database(k.keyword, instance.result) }
+            .to  change(AdResult, :count).by(1)
+            .and change(SearchResult, :count).by 10
+        end
       end
     end
   end

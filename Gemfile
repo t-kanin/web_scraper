@@ -52,7 +52,6 @@ group :test do
   gem 'shoulda-matchers', '~> 5.0'
   gem 'vcr', '~> 3.0', '>= 3.0.1'
   gem 'webmock', '~> 3.14'
-  gem 'httparty'
 end
 
 group :development do
