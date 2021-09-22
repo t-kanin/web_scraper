@@ -11,12 +11,12 @@ RSpec.describe ScraperService, type: :service do
       end
     end
 
-    let(:instance) { described_class.instance.result }
+    let(:res) { described_class.instance.result }
 
     context 'fetch page_result' do
       it 'returns 2,370... results' do
         allow(@driver).to receive(:page_source).and_return(subject)
-        expect(instance[:page_result]).to match 'ผลการค้นหาประมาณ 2,370,000,000 รายการ'
+        expect(res[:page_result]).to match 'ผลการค้นหาประมาณ 2,370,000,000 รายการ'
       end
     end
 
@@ -31,7 +31,7 @@ RSpec.describe ScraperService, type: :service do
           ]
 
         allow(@driver).to receive(:page_source).and_return(subject)
-        expect(instance[:ad_result]).to eq(mock)
+        expect(res[:ad_result]).to eq(mock)
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe ScraperService, type: :service do
             }
           ]
         allow(@driver).to receive(:page_source).and_return(subject)
-        expect(instance[:search_result]).to include(mock)
+        expect(res[:search_result]).to include(mock)
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe ScraperService, type: :service do
       it 'inserts to the database' do
         allow(@driver).to receive(:page_source).and_return(subject)
         aggregate_failures do
-          expect { instance.update_database(k.keyword, instance.result) }
+          expect { instance.store_result(k.keyword, instance.result) }
             .to  change(AdResult, :count).by(1)
             .and change(SearchResult, :count).by 10
         end
