@@ -6,7 +6,8 @@ class ScraperService < ApplicationService
   def call(keywords)
     init_driver
     keywords.each do |keyword|
-      update_database(keyword, result(keyword))
+      @driver.find_element(name: 'q').send_keys keyword, :return
+      update_database(keyword, result)
       @driver.find_element(name: 'q').clear
       sleep rand(1...15)
     end
@@ -19,11 +20,10 @@ class ScraperService < ApplicationService
     options.add_argument('--headless')
     @driver = Selenium::WebDriver.for :chrome
     @driver.get 'http://www.google.com/'
-    @driver
+    @driver.page
   end
 
-  def result(keyword)
-    @driver.find_element(name: 'q').send_keys keyword, :return
+  def result
     @dic = Nokogiri::HTML(@driver.page_source)
     {
       page_result: page_result,
