@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FileHandler
+  MAX_ROWS = 1001
+
   class FileExntensionError < StandardError; end
 
   class FileTooBigError < StandardError
@@ -18,7 +20,7 @@ class FileHandler
   def self.handle_upload(file, uid)
     raise FileEmptyError if file.blank?
     raise FileExntensionError unless %w[.csv].include? File.extname(file)
-    raise FileTooBigError if IO.readlines(file).size > 1001
+    raise FileTooBigError if IO.readlines(file).size > MAX_ROWS
 
     Keyword.import(file, uid)
   end

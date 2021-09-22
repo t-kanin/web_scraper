@@ -6,6 +6,7 @@ class ScraperService < ApplicationService
   def call(keywords)
     init_driver
     keywords.each do |keyword|
+      store_result(keyword, result(keyword))
       @driver.find_element(name: 'q').clear
       sleep rand(1...15)
     end
@@ -16,9 +17,8 @@ class ScraperService < ApplicationService
   def init_driver
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument('--headless')
-    @driver = Selenium::WebDriver.for :chrome
+    @driver = Selenium::WebDriver.for :chrome, options: options
     @driver.get 'http://www.google.com/'
-    @driver
   end
 
   def result(keyword)
@@ -45,5 +45,14 @@ class ScraperService < ApplicationService
     return 'no results containing your search terms' if @dic.at_css('div#result-stats').nil?
 
     @dic.at_css('div#result-stats').text
+  end
+
+  def store_result(key, res)
+    return if res[:page_result].nil?
+
+    Keyword.where(keyword: key).update(page_result: res[:page_result])
+    id = Keyword.where(keyword: key).last.id
+    SearchResult.where(keyword_id: id).insert_all(res[:search_result]) if res[:search_result].present?
+    AdResult.where(keyword_id: id).insert_all(res[:ad_result]) if res[:ad_result].present?
   end
 end
