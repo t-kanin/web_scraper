@@ -19,7 +19,6 @@ class ScraperService < ApplicationService
     options.add_argument('--headless')
     @driver = Selenium::WebDriver.for :chrome, options: options
     @driver.get 'http://www.google.com/'
-    @driver
   end
 
   def result(keyword)
