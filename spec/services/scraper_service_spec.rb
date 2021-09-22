@@ -6,13 +6,8 @@ RSpec.describe ScraperService, type: :service do
   describe 'call' do
     subject do
       VCR.use_cassette('google') do
-        # uri = URI('https://www.google.com/search?q=ads')
-        # Net::HTTP.get(uri)
-        options = Selenium::WebDriver::Chrome::Options.new
-        options.add_argument('--headless')
-        driver = Selenium::WebDriver.for :chrome, options: options
-        driver.get 'http://www.google.com/search?q=ads'
-        driver.page_source
+        uri = URI('https://www.google.com/search?q=ads')
+        Net::HTTP.get(uri)
       end
     end
 
