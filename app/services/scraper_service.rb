@@ -6,7 +6,8 @@ class ScraperService < ApplicationService
   def call(keywords)
     init_driver
     keywords.each do |keyword|
-      store_result(keyword, result(keyword))
+      @driver.find_element(name: 'q').send_keys keyword, :return
+      store_result(keyword, result)
       @driver.find_element(name: 'q').clear
       sleep rand(1...15)
     end
@@ -21,8 +22,7 @@ class ScraperService < ApplicationService
     @driver.get 'http://www.google.com/'
   end
 
-  def result(keyword)
-    @driver.find_element(name: 'q').send_keys keyword, :return
+  def result
     @dic = Nokogiri::HTML(@driver.page_source)
     {
       page_result: page_result,

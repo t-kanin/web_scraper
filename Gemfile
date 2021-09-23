@@ -50,6 +50,8 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0', '>= 1.0.5'
   gem 'rspec-sidekiq'
   gem 'shoulda-matchers', '~> 5.0'
+  gem 'vcr', '~> 3.0', '>= 3.0.1'
+  gem 'webmock', '~> 3.14'
 end
 
 group :development do
