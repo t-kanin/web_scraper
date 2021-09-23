@@ -7,8 +7,7 @@ class ScraperService < ApplicationService
     init_driver
     keywords.each do |keyword|
       @driver.find_element(name: 'q').send_keys keyword, :return
-      update_database(keyword, result)
-      store_result(keyword, result(keyword))
+      store_result(keyword, result)
       @driver.find_element(name: 'q').clear
       sleep rand(1...15)
     end
@@ -50,6 +49,7 @@ class ScraperService < ApplicationService
 
   def store_result(key, res)
     return if res[:page_result].nil?
+
     Keyword.where(keyword: key).update(page_result: res[:page_result])
     id = Keyword.where(keyword: key).last.id
     SearchResult.where(keyword_id: id).insert_all(res[:search_result]) if res[:search_result].present?
